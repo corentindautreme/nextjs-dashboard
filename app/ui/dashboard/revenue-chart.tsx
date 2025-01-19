@@ -9,7 +9,7 @@ import { lusitana } from '@/app/ui/fonts';
 // https://airbnb.io/visx/
 
 export default async function RevenueChart({
-  revenue,
+  // revenue,
 }: {
   // revenue: Revenue[];
 }) {
