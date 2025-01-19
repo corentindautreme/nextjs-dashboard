@@ -113,7 +113,7 @@ function PaginationArrow({
     <div className={className}>{icon}</div>
   ) : (
     <Link className={className} href={href}>
-      {icon}
+      {/*{icon}*/}
     </Link>
   );
 }
