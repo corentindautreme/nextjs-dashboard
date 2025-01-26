@@ -98,7 +98,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     }
 
     const { customerId, amount, status } = validationStatus.data;
-    const amountInCents = amount * 100;
+    const amountInCents = Math.round(amount * 100);
 
     try {
 
