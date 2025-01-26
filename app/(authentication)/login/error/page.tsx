@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function LoginPage() {
     const search = useSearchParams()
-    const error = search.get('error') as Error
+    const error = search.get('error')
 
     return (
         <main className="flex items-center justify-center md:h-screen">
