@@ -18,17 +18,17 @@ export const authConfig = {
         error: '/login/error'
     },
     callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
+        async signIn({ user }) {
             try {
-                if (user.name) {
+                if (user?.name) {
                     const dbUser = await getUserByName(user.name);
-                    return dbUser && true;
+                    return !!dbUser && true;
                 }
-                return false;
             } catch (e) {
                 console.dir(e);
                 return false;
             }
+            return false;
         },
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;

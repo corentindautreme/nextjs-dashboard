@@ -1,6 +1,6 @@
 'use server';
 
-import {z, ZodObject} from 'zod';
+import {z} from 'zod';
 import {sql} from '@vercel/postgres';
 import {revalidatePath} from 'next/cache';
 import {redirect} from 'next/navigation';
@@ -31,44 +31,23 @@ export type State = {
     message?: string | null;
 };
 
-const emptyState: State = {
-    errors: {},
-    message: null
-}
-
-type InvoiceValidationStatus = {
-    success: boolean;
-    status: State;
-    data?: FormData | null;
-}
-
-function validateInvoiceFields(formData: FormData, schema: ZodObject): InvoiceValidationStatus {
-    const validatedFields = schema.safeParse({
+export async function createInvoice(prevState: State, formData: FormData) {
+    const validatedFields = CreateInvoice.safeParse({
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
     });
-
-    return {
-        success: validatedFields.success,
-        status: validatedFields.success ? emptyState : {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Invoice.'
-        },
-        data: validatedFields.data,
-    }
-}
-
-export async function createInvoice(prevState: State, formData: FormData) {
-    const validationStatus = validateInvoiceFields(formData, CreateInvoice);
-    console.log(validationStatus);
+    console.log(validatedFields);
 
     // If form validation fails, return errors early. Otherwise, continue.
-    if (!validationStatus.success) {
-        return validationStatus.status;
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create Invoice.'
+        }
     }
 
-    const { customerId, amount, status } = validationStatus.data;
+    const { customerId, amount, status } = validatedFields.data;
     const amountInCents = amount * 100;
     const date = new Date().toISOString().split('T')[0];
 
@@ -89,15 +68,22 @@ export async function createInvoice(prevState: State, formData: FormData) {
 }
 
 export async function updateInvoice(id: string, prevState: State, formData: FormData) {
-    const validationStatus = validateInvoiceFields(formData, UpdateInvoice);
-    console.log(validationStatus);
+    const validatedFields = UpdateInvoice.safeParse({
+        customerId: formData.get('customerId'),
+        amount: formData.get('amount'),
+        status: formData.get('status'),
+    });
+    console.log(validatedFields);
 
     // If form validation fails, return errors early. Otherwise, continue.
-    if (!validationStatus.success) {
-        return validationStatus.status;
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Update Invoice.'
+        }
     }
 
-    const { customerId, amount, status } = validationStatus.data;
+    const { customerId, amount, status } = validatedFields.data;
     const amountInCents = Math.round(amount * 100);
 
     try {

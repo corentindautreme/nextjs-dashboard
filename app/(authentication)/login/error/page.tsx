@@ -6,9 +6,30 @@ import {useSearchParams} from 'next/navigation';
 import {lusitana} from '@/app/ui/fonts';
 import Link from 'next/link';
 
-export default function LoginPage() {
+function Error() {
     const search = useSearchParams()
     const error = search.get('error')
+    return (
+        <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
+            <h5 className={`${lusitana.className} mb-3 text-2xl`}>
+                An error occurred while trying to authenticate
+            </h5>
+            <div className="font-normal">
+                Error message: {error}
+            </div>
+            <div className="mt-5">
+                <Link
+                    href="/login"
+                    className="rounded-lg bg-blue-600 p-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                >
+                    Return to the login page
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+export default function LoginPage() {
 
     return (
         <main className="flex items-center justify-center md:h-screen">
@@ -19,22 +40,7 @@ export default function LoginPage() {
                     </div>
                 </div>
                 <Suspense>
-                    <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-                        <h5 className={`${lusitana.className} mb-3 text-2xl`}>
-                            An error occurred while trying to authenticate
-                        </h5>
-                        <div className="font-normal">
-                            Error message: {error}
-                        </div>
-                        <div className="mt-5">
-                            <Link
-                                href="/login"
-                                className="rounded-lg bg-blue-600 p-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            >
-                                Return to the login page
-                            </Link>
-                        </div>
-                    </div>
+                    <Error/>
                 </Suspense>
             </div>
         </main>

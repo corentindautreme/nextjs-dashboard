@@ -5,6 +5,7 @@ import {z} from 'zod';
 import {sql} from '@vercel/postgres';
 import type {User} from '@/app/lib/definitions';
 import GitHub from 'next-auth/providers/github';
+import bcrypt from 'bcrypt';
 
 async function getUserByEmail(email: string): Promise<User | undefined> {
     try {
