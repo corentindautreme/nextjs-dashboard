@@ -1,13 +1,7 @@
-import { sql } from '@vercel/postgres';
-import {
-  CustomerField,
-  CustomersTableType,
-  InvoiceForm,
-  InvoicesTable,
-  LatestInvoiceRaw,
-  Revenue,
-} from './definitions';
-import { formatCurrency } from './utils';
+import {sql} from '@vercel/postgres';
+import {CustomerField, CustomersTableType, InvoiceForm, InvoicesTable, LatestInvoiceRaw, Revenue, Event} from './definitions';
+import {formatCurrency} from './utils';
+import {unstable_cache as cache} from 'next/cache';
 
 export async function fetchRevenue() {
   try {
@@ -215,4 +209,62 @@ export async function fetchFilteredCustomers(query: string) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
   }
+}
+
+export const fetchCachedEvents = cache(() => fetchEvents(), ["events-cache-key"])
+
+export async function fetchEvents(): Promise<Event[]> {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  return [
+    {
+      id: 1,
+      name: 'Event 1',
+      stage: 'Stage'
+    },
+    {
+      id: 2,
+      name: 'Event 2',
+      stage: 'Stage'
+    },
+    {
+      id: 3,
+      name: 'Event 3',
+      stage: 'Stage'
+    },
+    {
+      id: 4,
+      name: 'Event 4',
+      stage: 'Stage'
+    },
+    {
+      id: 5,
+      name: 'Event 5',
+      stage: 'Stage'
+    },
+    {
+      id: 6,
+      name: 'Event 6',
+      stage: 'Stage'
+    },
+    {
+      id: 7,
+      name: 'Event 7',
+      stage: 'Stage'
+    },
+    {
+      id: 8,
+      name: 'Event 8',
+      stage: 'Stage'
+    },
+    {
+      id: 9,
+      name: 'Event 9',
+      stage: 'Stage'
+    },
+    {
+      id: 10,
+      name: 'Event 10',
+      stage: 'Stage'
+    }
+  ];
 }
