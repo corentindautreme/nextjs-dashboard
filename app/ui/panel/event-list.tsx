@@ -3,7 +3,6 @@ import {Event} from '@/app/lib/definitions';
 import {clsx} from 'clsx';
 
 export default async function EventList({events, currentEvent}: { events: Event[], currentEvent: number | undefined }) {
-
     return (
         <div className="flex max-h-full overflow-y-auto flex-col">
             <div className="flex justify-between flex-col space-y-2">
@@ -20,8 +19,18 @@ export default async function EventList({events, currentEvent}: { events: Event[
                             <Link href={`/dashboard/panel/edit/${event.id}#${event.id}`}>
                                 <div className="flex items-center justify-between p-4">
                                     <div>
-                                        <p className="md text-gray-900 dark:text-gray-100">{event.name}</p>
-                                        <p className="text-sm text-gray-500">{event.stage}</p>
+                                        <p className={clsx('md text-gray-900 dark:text-gray-100',
+                                            {
+                                                'font-bold': currentEvent == event.id
+                                            }
+                                        )}
+                                        >{event.name}</p>
+                                        <p className={clsx('text-sm text-gray-500',
+                                        {
+                                            'font-bold': currentEvent == event.id
+                                        }
+                                        )}
+                                        >{event.stage}</p>
                                     </div>
                                 </div>
                             </Link>
